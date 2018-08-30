@@ -1,0 +1,43 @@
+.searchform {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#search-text {
+  margin-left: 0.5rem;
+  flex :1;
+}
+
+.search-button {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  background: #22b8cf;
+  border-radius: 3px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.selecttype {
+  width: 80px;
+  height: 30px;
+  margin-left: 1rem;
+}
+
+.parkingchk {
+  cursor: pointer;
+}
+
+label {
+  margin: 0;
+  margin-right: 0.5rem;
+  text-align: center;
+}
