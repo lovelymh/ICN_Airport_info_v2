@@ -1,0 +1,54 @@
+.searchform {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #a5d8ff;
+  border-radius: 3px;
+}
+
+#search-text {
+  margin-left: 0.5rem;
+  color: #1864ab;
+  flex: 1;
+}
+
+.search-button {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  background: #e7f5ff;
+  border-radius: 3px;
+  color: #1864ab;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #1864ab;
+}
+.search-button:hover {
+  background:  #1864ab;
+  color: white;
+  border: 1px solid #1864ab;
+}
+
+.selecttype {
+  width: 80px;
+  height: 30px;
+  margin-left: 1rem;
+}
+
+.parkingchk {
+  cursor: pointer;
+}
+
+label {
+  margin: 0;
+  margin-right: 0.5rem;
+  text-align: center;
+  color: #1864ab;
+  font-weight: bold;
+}
