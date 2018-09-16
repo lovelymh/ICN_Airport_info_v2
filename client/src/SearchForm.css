@@ -9,12 +9,38 @@
   border-radius: 3px;
 }
 
+.searchtext-auto {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+}
+
 #search-text {
   margin-left: 0.5rem;
   color: #1864ab;
-  flex: 1;
 }
 
+.autoComplete{
+  display: none;
+}
+
+.visible {
+  border: 1px solid #4dabf7;
+ width: 720px;
+ min-height: 20px;
+ max-height: 300px;
+ position: absolute;
+ overflow: visible;
+ background-color: white;
+ top: 29px;
+ margin-left: 8px;
+ overflow: auto;
+}
+
+.invisible {
+  display: none;
+}
 .search-button {
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;

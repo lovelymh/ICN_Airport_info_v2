@@ -3,7 +3,7 @@
   flex-direction: column;
   /* border: 1px solid gray; */
   width: 1100px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .basic-info-wrapper {

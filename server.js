@@ -61,7 +61,7 @@ app.post('/api/basic', (req, res) => {
   flight_id = req.body.input;
   type = req.body.selected;
 
-  getData(type==='departure'? url :url2)
+  getData(type==='departure'? url : url2)
     .then(resolve => res.send({data: data}))
     .catch(error => console.log(error));
 });

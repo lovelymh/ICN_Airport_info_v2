@@ -1,0 +1,11 @@
+.flightid_list {
+  cursor: pointer;
+  font-size: 14px;
+}
+.flightid_list:hover {
+  background-color: #e7f5ff;
+}
+
+.focused {
+  background-color: #e7f5ff;
+}

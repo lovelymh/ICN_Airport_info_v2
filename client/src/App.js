@@ -6,7 +6,6 @@ import SearchForm from './SearchForm';
 import BasicInfo from './BasicInfo';
 import CongestionInfo from './CongestionInfo';
 import ParkingInfo from './ParkingInfo';
-//import { Link } from 'react-router-dom';
 
 class App extends Component {
 
@@ -14,15 +13,34 @@ class App extends Component {
       input: '',
       checked: false,
       selected: 'departure',
-      index: 0
+      index: 0,
+      flightid: '',
+      flightid_focusidx: '',
+      flightid_focusmode: true
     }
 
-     _getBasicdata = async () => {
+    constructor(props) {
+      super(props);
+      this.flightRef = React.createRef();
+    }
+
+     _getBasicdata = async (type) => {
       const basicdatas = await this._callApi('/api/basic')
 
-      this.setState({
-        basicdata: basicdatas.data.item
-      })
+      if(type==='flightid'){
+        if(this.state.input && basicdatas.data){
+           const flight_id = basicdatas.data.item.map((data, index) => {
+             return data.flightId;
+           })
+           this.setState({
+             flightid: flight_id
+           })
+       }
+     } else {
+       this.setState({
+         basicdata: basicdatas.data.item
+       })
+     }
     }
 
     _getCongestiondata = async () => {
@@ -74,7 +92,7 @@ class App extends Component {
     });
 
     if(input) {
-      this._getBasicdata();
+      this._getBasicdata('all');
       this._getCongestiondata();
       if(checked) this._getParkingdata();
     } else {
@@ -84,7 +102,12 @@ class App extends Component {
 
   handleChangeValue = (e) => {
     this.setState({
-      input: e.target.value
+      input: e.target.value,
+      flightid_focusmode: true,
+      flightid_focusidx: ''
+    }, () => {
+      if(this.state.input) this._getBasicdata('flightid');
+      this.flightRef.current.scrollTop = 0;
     });
   }
 
@@ -95,8 +118,25 @@ class App extends Component {
   }
 
   handleKeyPress = (e) => {
+    const { flightid, flightid_focusmode, flightid_focusidx } = this.state;
+
     if(e.key === 'Enter') {
-      this.handleSubmit();
+      if(flightid_focusmode) {
+        const selected_data = flightid.filter((item,index) => {
+          return index===flightid_focusidx;
+        });
+        this.setState({
+          input: String(selected_data),
+          flightid_focusmode: false,
+          flightid_focusidx: ''
+        }, ()=> {
+            this.handleSubmit();
+            this.flightRef.current.scrollTop = 0;
+        });
+      } else {
+        this.handleSubmit();
+      }
+
     }
   }
 
@@ -118,14 +158,97 @@ class App extends Component {
       checked: false,
       selected: 'departure',
       index: 0,
+      flightid: '',
       basicdata: '',
       congestiondata: '',
-      parkingdata: ''
+      parkingdata: '',
+      flightid_focusidx: '',
+      flightid_focusmode: true
     });
   }
 
+  handleKeyDown = (e) => {
+    const { flightid, flightid_focusmode, flightid_focusidx } = this.state;
+    let nextidx;
+
+    if(e.key==='ArrowDown'){
+      if(flightid_focusmode && flightid_focusidx===''){
+        this.setState({
+          input: String(flightid.filter((f, idx) => idx===0)),
+          flightid_focusidx: 0
+        });
+      }else if(!flightid_focusmode && (flightid_focusidx==='' || flightid_focusidx===0)){
+        this.setState({
+          flightid_focusmode: true,
+          flightid_focusidx: ''
+        });
+      }else if(flightid_focusmode && flightid_focusidx!==''){
+        if(flightid.length-1===flightid_focusidx){
+          this.setState({
+            flightid_focusidx: ''
+          });
+          this.flightRef.current.scrollTop = 0;
+        } else {
+          nextidx = flightid_focusidx + 1;
+          this.setState({
+            input: String(flightid.filter((f, idx) => idx===nextidx)),
+            flightid_focusidx: nextidx
+          });
+          this.flightRef.current.scrollTop += 14;
+        }
+      }
+    } else if(e.key==='ArrowUp'){
+      if(flightid_focusmode && flightid_focusidx===''){
+        this.setState({
+          flightid_focusmode: false,
+          flightid_focusidx: ''
+        });
+      }else if(flightid_focusmode && flightid_focusidx!==''){
+        if(flightid_focusidx===0){
+          this.setState({
+            flightid_focusidx: ''
+          });
+          this.flightRef.current.scrollTop = 0;
+        } else {
+          nextidx = flightid_focusidx - 1;
+          this.setState({
+            input: String(flightid.filter((f, idx) => idx===nextidx)),
+            flightid_focusidx: nextidx
+          });
+          this.flightRef.current.scrollTop -= 14;
+        }
+      }
+    }
+  }
+
+  handleClickflightid = (index) => {
+    const { flightid } = this.state;
+    const selected_data = flightid.filter((item, idx) => {
+      return idx===index;
+    });
+    console.log(selected_data);
+    this.setState({
+      input: String(selected_data),
+      flightid_focusmode: false,
+      flightid_focusidx: ''
+    });
+  }
+
+  handleClickinput = () => {
+    const { flightid_focusmode } = this.state;
+    this.setState({
+      flightid_focusmode: !flightid_focusmode,
+      flightid_focusidx: ''
+    }, ()=> {
+      if(this.state.input) this._getBasicdata('flightid');
+      this.flightRef.current.scrollTop = 0;
+    });
+  }
+
+
   render() {
-    const { input, checked, selected, basicdata, congestiondata, index, parkingdata } = this.state;
+    const { input, checked, selected, flightid, basicdata, congestiondata, index,
+            parkingdata, flightid_focusmode, flightid_focusidx } = this.state;
     const {
       handleChangeValue,
       handleChangeChk,
@@ -133,7 +256,10 @@ class App extends Component {
       handleSubmit,
       handleChangeSelect,
       handleSelectindex,
-      handleClickimg
+      handleClickimg,
+      handleKeyDown,
+      handleClickflightid,
+      handleClickinput
     } = this;
 
     return (
@@ -144,11 +270,18 @@ class App extends Component {
         <IcnAInfoTemplate searchform={(
             <SearchForm
               value={input}
+              flightid={flightid}
+              flightid_focusmode={flightid_focusmode}
+              flightid_focusidx={flightid_focusidx}
               onChangevalue={handleChangeValue}
               onChangechk={handleChangeChk}
               onChangeselect={handleChangeSelect}
               onKeyPress={handleKeyPress}
               onSearch={handleSubmit}
+              onKeyDown={handleKeyDown}
+              onClickflightid={handleClickflightid}
+              onClickinput={handleClickinput}
+              flightRef={this.flightRef}
               />
           )}
             basicinfo={(
