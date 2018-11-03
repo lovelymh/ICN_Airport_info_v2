@@ -6,7 +6,7 @@ const xml2js = require('xml2js');
 const app = express();
 //promise를 사용하기 위함
 const rq = require('request-promise');
-
+const apikey = require('./apikey');
 // parse application/x-www-form-urlencoded
 //client한테 json으로 받으려고 사용
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,7 +25,7 @@ let url2='http://openapi.airport.kr/openapi/service/StatusOfPassengerWeahter/get
 let url3='http://openapi.airport.kr/openapi/service/PassengerNoticeKR/getfPassengerNoticeIKR?';
 let url4='http://openapi.airport.kr/openapi/service/StatusOfParking/getTrackingParking?';
 let url_add ='/openapi/service/StatusOfPassengerWeahter/getPassengerDeparturesW?'
-let ServiceKey='ServiceKey=vO6meNAKoskv2FfBIM3DYwD3rNolNJa80t87Alyf%2FKPC8xypeXMAL07hFwcWYrOlerLkaunEPYcKp4FwhtHgxQ%3D%3D';
+let ServiceKey=`ServiceKey=${apikey.key}`;
 let page = '&numOfRows=50';
 let selectdate = '&selectdate=0'; //오늘일자 공항 혼잡도
 let parser = new xml2js.Parser();
